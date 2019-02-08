@@ -1,0 +1,61 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 2rem;
+  background-color: #C6DABF;
+}
+
+.card {
+  margin: 1rem;
+  padding: 2rem;
+  text-align: center;
+  font-size: 16px;
+  color: #88D498;
+  background-color: #114B5F;
+  border-radius: 20px;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.card-name {
+  font-size: 25px;
+  font-weight: bold;
+  color: #F3E9D2;
+}
+
+.card-sex {
+  font-style: italic;
+  color: #1A936F;
+}
+
+.card-age {
+  margin: 1rem 0;
+  font-weight: bold;
+}
+
+.card-father, .card-mother {
+  font-size: 18px;
+}
+
+.table {
+  width: 50%;
+  margin: auto;
+  background-color: #F3E9D2;
+}
+
+.table-header {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #C6DABF;
+  background-color: #114B5F;
+}
+
+.table-row {
+  color: #114B5F;
+  font-size: 18px;
+}
+
+.table-data-right {
+  text-align: right;
+}
