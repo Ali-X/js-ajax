@@ -72,9 +72,7 @@ window.task2 = function task2() {
         let divElem = document.createElement("div");
         divElem.setAttribute("class", "cards");
 
-        for (let i = 0; i < ANCESTRY_FILE.length; i++) {
-          createCard(divElem, ANCESTRY_FILE[i]);
-        }
+        ANCESTRY_FILE.forEach(elem => createCard(divElem, elem));
 
         document.body.appendChild(divElem);
       }
