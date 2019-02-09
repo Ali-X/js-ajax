@@ -81,3 +81,137 @@ window.task2 = function task2() {
     }
   };
 };
+
+window.task3 = function task3() {
+  let visitorsTable;
+  let xhr = new XMLHttpRequest();
+
+  xhr.open('GET', 'https://tanuhaua.github.io/datas-file-json/visitors.json', true);
+
+  xhr.send();
+
+  xhr.onreadystatechange = function() { // (3)
+    if (xhr.readyState != 4) return;
+
+    function createHeaderRow() {
+      let rowElem = document.createElement('tr');
+      rowElem.classList.add('table__headers');
+
+      let headerIdElem = document.createElement('th');
+      headerIdElem.classList.add('table__header');
+      headerIdElem.id = 'id';
+      headerIdElem.innerText = 'Visitor id';
+
+      let headerRegElem = document.createElement('th');
+      headerRegElem.classList.add('table__header');
+      headerRegElem.id = 'createdAt';
+      headerRegElem.innerText = 'Registration date';
+
+      let headerNameElem = document.createElement('th');
+      headerNameElem.classList.add('table__header');
+      headerNameElem.id = 'name';
+      headerNameElem.innerText = 'Name';
+
+      let headerEmailElem = document.createElement('th');
+      headerEmailElem.classList.add('table__header');
+      headerEmailElem.id = 'email';
+      headerEmailElem.innerText = 'Email';
+
+      let headerDescrElem = document.createElement('th');
+      headerDescrElem.classList.add('table__header');
+      headerDescrElem.id = 'description';
+      headerDescrElem.innerText = 'Description';
+
+      rowElem.appendChild(headerIdElem);
+      rowElem.appendChild(headerRegElem);
+      rowElem.appendChild(headerNameElem);
+      rowElem.appendChild(headerEmailElem);
+      rowElem.appendChild(headerDescrElem);
+      return rowElem;
+    }
+
+    function fillTable(tableElem) {
+      visitorsTable.forEach((elem) => {
+        let rowElem = document.createElement('tr');
+        rowElem.classList.add('table__row');
+
+        let headerIdElem = document.createElement('th');
+        headerIdElem.classList.add('table__data');
+        headerIdElem.innerText = elem['id'];
+
+        let headerRegElem = document.createElement('th');
+        headerRegElem.classList.add('table__data');
+        headerRegElem.innerText = elem['createdAt'];
+
+        let headerNameElem = document.createElement('th');
+        headerNameElem.classList.add('table__data');
+        headerNameElem.innerText = elem['name'];
+
+        let headerEmailElem = document.createElement('th');
+        headerEmailElem.classList.add('table__data');
+        headerEmailElem.innerText = elem['email'];
+
+        let headerDescrElem = document.createElement('th');
+        headerDescrElem.classList.add('table__data');
+        headerDescrElem.innerText = elem['description'];
+
+        rowElem.appendChild(headerIdElem);
+        rowElem.appendChild(headerRegElem);
+        rowElem.appendChild(headerNameElem);
+        rowElem.appendChild(headerEmailElem);
+        rowElem.appendChild(headerDescrElem);
+
+        tableElem.appendChild(rowElem);
+      });
+    }
+
+    function addClickListeners() {
+      let headers = document.getElementsByClassName('table__header');
+
+      for (let i = 0; i < headers.length; i++) {
+        headers[i].addEventListener('click', () => {
+          sortByKey(headers[i].id);
+
+          document.querySelectorAll('.table__row').forEach(elem => {
+            elem.remove();
+          });
+
+          // debugger;
+          fillTable(document.getElementsByClassName('table')[0]);
+        })
+      }
+    }
+
+    if (xhr.status != 200) {
+      alert(xhr.status + ': ' + xhr.statusText);
+    } else {
+      visitorsTable = JSON.parse(xhr.responseText);
+      sortByKey('id');
+
+      let tableElem = document.createElement('table');
+      tableElem.classList.add('table');
+
+      let rowElem = createHeaderRow();
+
+      tableElem.appendChild(rowElem);
+      fillTable(tableElem);
+
+      document.body.appendChild(tableElem);
+
+      addClickListeners();
+    }
+  };
+
+  function sortByKey(key) {
+    visitorsTable.sort((a, b) => {
+      if (a[key] > b[key]) {
+        return 1;
+      }
+      if (a[key] < b[key]) {
+        return -1;
+      }
+
+      return 0;
+    });
+  }
+};
