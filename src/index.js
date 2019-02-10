@@ -213,3 +213,119 @@ window.task3 = function task3() {
     });
   }
 };
+
+window.task4 = function task4() {
+  let counter = 1;
+  let visitorsObj;
+
+  let tableElem = document.getElementsByClassName('table')[0];
+
+  let rowElem = createHeaderRow();
+  tableElem.appendChild(rowElem);
+
+  sendRequest();
+
+  addClickListeners();
+
+  function sendRequest() {
+    let link = `https://tanuhaua.github.io/datas-file-json/dynamic-loading/${counter}/users.json`;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', link, true);
+    xhr.send();
+    xhr.onreadystatechange = function() { // (3)
+      if (xhr.readyState != 4) return;
+      if (xhr.status != 200) {
+        alert(xhr.status + ': ' + xhr.statusText);
+      } else {
+        visitorsObj = JSON.parse(xhr.responseText);
+        counter = visitorsObj['page'] + 1;
+
+        fillTable(tableElem);
+
+        updateBtn(document.getElementsByClassName('load-more__btn')[0]);
+      }
+
+      function fillTable(tableElem) {
+        visitorsObj.data.forEach((elem) => {
+          let rowElem = document.createElement('tr');
+          rowElem.classList.add('table__row');
+
+          let headerIdElem = document.createElement('th');
+          headerIdElem.classList.add('table__data');
+          headerIdElem.innerText = elem['id'];
+
+          let headerRegElem = document.createElement('th');
+          headerRegElem.classList.add('table__data');
+          headerRegElem.innerText = elem['createdAt'];
+
+          let headerNameElem = document.createElement('th');
+          headerNameElem.classList.add('table__data');
+          headerNameElem.innerText = elem['name'];
+
+          let headerEmailElem = document.createElement('th');
+          headerEmailElem.classList.add('table__data');
+          headerEmailElem.innerText = elem['email'];
+
+          let headerDescrElem = document.createElement('th');
+          headerDescrElem.classList.add('table__data');
+          headerDescrElem.innerText = elem['description'];
+
+          rowElem.appendChild(headerIdElem);
+          rowElem.appendChild(headerRegElem);
+          rowElem.appendChild(headerNameElem);
+          rowElem.appendChild(headerEmailElem);
+          rowElem.appendChild(headerDescrElem);
+
+          tableElem.appendChild(rowElem);
+        });
+      }
+    };
+  }
+
+  function addClickListeners() {
+    document.getElementsByClassName('load-more__btn')[0].addEventListener('click', sendRequest);
+  }
+
+  function createHeaderRow() {
+    let rowElem = document.createElement('tr');
+    rowElem.classList.add('table__headers');
+
+    let headerIdElem = document.createElement('th');
+    headerIdElem.classList.add('table__header');
+    headerIdElem.id = 'id';
+    headerIdElem.innerText = 'Visitor id';
+
+    let headerRegElem = document.createElement('th');
+    headerRegElem.classList.add('table__header');
+    headerRegElem.id = 'createdAt';
+    headerRegElem.innerText = 'Registration date';
+
+    let headerNameElem = document.createElement('th');
+    headerNameElem.classList.add('table__header');
+    headerNameElem.id = 'name';
+    headerNameElem.innerText = 'Name';
+
+    let headerEmailElem = document.createElement('th');
+    headerEmailElem.classList.add('table__header');
+    headerEmailElem.id = 'email';
+    headerEmailElem.innerText = 'Email';
+
+    let headerDescrElem = document.createElement('th');
+    headerDescrElem.classList.add('table__header');
+    headerDescrElem.id = 'description';
+    headerDescrElem.innerText = 'Description';
+
+    rowElem.appendChild(headerIdElem);
+    rowElem.appendChild(headerRegElem);
+    rowElem.appendChild(headerNameElem);
+    rowElem.appendChild(headerEmailElem);
+    rowElem.appendChild(headerDescrElem);
+    return rowElem;
+  }
+
+  function updateBtn(btnElem) {
+    if (!visitorsObj['loadMore']) {
+      btnElem.disabled = true;
+    }
+  }
+};

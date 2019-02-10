@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Task4</title>
+  <link rel="stylesheet" href="../css/style4.css">
+  <script type="text/javascript" src='../main.js'></script>
+</head>
+<body>
+  Организовать динамическую загрузку и отображение данных.
+  <ul>
+    <li>Необходимо отображать список пользователей по 20 строк.</li>
+    <li>Внизу есть кнопка "Показать больше".</li>
+    <li>При нажатии на кнопку "Показать больше" должно отображаться еще 20 строк.</li>
+    <li>Когда данных больше нет - прятать кнопку.</li>
+    <li>Запросы за данными выполнять по адресам:</li>
+    <ul>
+      <li>https://tanuhaua.github.io/datas-file-json/dynamic-loading/1/users.json - 1-20 пользователей</li>
+      <li>https://tanuhaua.github.io/datas-file-json/dynamic-loading/2/users.json - 21-40 пользователей</li>
+      <li>и т.д.</li>
+    </ul>
+    <li>Структура ответа ("loadMore" показывает есть ли еще данные):</li>
+  </ul>
+  <p>
+    {
+    "page": 4,
+    "loadMore": false,
+    "data": [{},{}]
+    }
+  </p>
+  <table class="table">
+
+  </table>
+  <div class="load-more">
+    <button class="load-more__btn">Load more</button>
+  </div>
+
+  <script>task4();</script>
+</body>
+</html>

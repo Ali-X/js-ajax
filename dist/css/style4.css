@@ -1,0 +1,11 @@
+.load-more {
+  text-align: center;
+}
+
+.table {
+  width: 100%;
+}
+
+.table__data {
+  font-weight: normal;
+}
