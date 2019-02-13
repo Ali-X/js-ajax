@@ -139,7 +139,8 @@ window.task3 = function task3() {
 
         let headerRegElem = document.createElement('th');
         headerRegElem.classList.add('table__data');
-        headerRegElem.innerText = elem['createdAt'];
+        let date = new Date(elem['createdAt']);
+        headerRegElem.innerText = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
         let headerNameElem = document.createElement('th');
         headerNameElem.classList.add('table__data');
