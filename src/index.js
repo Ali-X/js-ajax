@@ -91,42 +91,6 @@ window.task3 = function task3() {
   xhr.onreadystatechange = function() { // (3)
     if (xhr.readyState != 4) return;
 
-    function fillTable(tableElem) {
-      visitorsTable.forEach((elem) => {
-        let rowElem = document.createElement('tr');
-        rowElem.classList.add('table__row');
-
-        let headerIdElem = document.createElement('td');
-        headerIdElem.classList.add('table__data');
-        headerIdElem.innerText = elem['id'];
-
-        let headerRegElem = document.createElement('td');
-        headerRegElem.classList.add('table__data');
-        let date = new Date(elem['createdAt']);
-        headerRegElem.innerText = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-
-        let headerNameElem = document.createElement('td');
-        headerNameElem.classList.add('table__data');
-        headerNameElem.innerText = elem['name'];
-
-        let headerEmailElem = document.createElement('td');
-        headerEmailElem.classList.add('table__data');
-        headerEmailElem.innerText = elem['email'];
-
-        let headerDescrElem = document.createElement('td');
-        headerDescrElem.classList.add('table__data');
-        headerDescrElem.innerText = elem['description'];
-
-        rowElem.appendChild(headerIdElem);
-        rowElem.appendChild(headerRegElem);
-        rowElem.appendChild(headerNameElem);
-        rowElem.appendChild(headerEmailElem);
-        rowElem.appendChild(headerDescrElem);
-
-        tableElem.appendChild(rowElem);
-      });
-    }
-
     function addClickListeners() {
       let headers = document.getElementsByClassName('table__header');
 
@@ -158,7 +122,7 @@ window.task3 = function task3() {
           });
 
           // debugger;
-          fillTable(document.getElementsByClassName('table')[0]);
+          fillTable(visitorsTable, document.getElementsByClassName('table')[0]);
         });
       }
     }
@@ -175,7 +139,7 @@ window.task3 = function task3() {
       let rowElem = createHeaderRow();
 
       tableElem.appendChild(rowElem);
-      fillTable(tableElem);
+      fillTable(visitorsTable, tableElem);
 
       document.body.appendChild(tableElem);
 
@@ -236,46 +200,9 @@ window.task4 = function task4() {
         visitorsObj = JSON.parse(xhr.responseText);
         counter = visitorsObj['page'] + 1;
 
-        fillTable(tableElem);
+        fillTable(visitorsObj.data, tableElem);
 
         updateBtn(document.getElementsByClassName('load-more__btn')[0]);
-      }
-
-      function fillTable(tableElem) {
-        visitorsObj.data.forEach((elem) => {
-          let rowElem = document.createElement('tr');
-          rowElem.classList.add('table__row');
-
-          let headerIdElem = document.createElement('td');
-          headerIdElem.classList.add('table__data');
-          headerIdElem.innerText = elem['id'];
-
-          let headerRegElem = document.createElement('td');
-          headerRegElem.classList.add('table__data');
-          headerRegElem.innerText = elem['createdAt'];
-          let date = new Date(elem['createdAt']);
-          headerRegElem.innerText = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-
-          let headerNameElem = document.createElement('td');
-          headerNameElem.classList.add('table__data');
-          headerNameElem.innerText = elem['name'];
-
-          let headerEmailElem = document.createElement('td');
-          headerEmailElem.classList.add('table__data');
-          headerEmailElem.innerText = elem['email'];
-
-          let headerDescrElem = document.createElement('td');
-          headerDescrElem.classList.add('table__data');
-          headerDescrElem.innerText = elem['description'];
-
-          rowElem.appendChild(headerIdElem);
-          rowElem.appendChild(headerRegElem);
-          rowElem.appendChild(headerNameElem);
-          rowElem.appendChild(headerEmailElem);
-          rowElem.appendChild(headerDescrElem);
-
-          tableElem.appendChild(rowElem);
-        });
       }
     };
   }
@@ -295,36 +222,51 @@ function createHeaderRow() {
   let rowElem = document.createElement('tr');
   rowElem.classList.add('table__headers');
 
-  let headerIdElem = document.createElement('th');
-  headerIdElem.classList.add('table__header');
+  let headerIdElem = createElement('th', 'table__header', 'Visitor id', 'id');
   headerIdElem.classList.add('js-sort-asc');
-  headerIdElem.id = 'id';
-  headerIdElem.innerText = 'Visitor id';
 
-  let headerRegElem = document.createElement('th');
-  headerRegElem.classList.add('table__header');
-  headerRegElem.id = 'createdAt';
-  headerRegElem.innerText = 'Registration date';
-
-  let headerNameElem = document.createElement('th');
-  headerNameElem.classList.add('table__header');
-  headerNameElem.id = 'name';
-  headerNameElem.innerText = 'Name';
-
-  let headerEmailElem = document.createElement('th');
-  headerEmailElem.classList.add('table__header');
-  headerEmailElem.id = 'email';
-  headerEmailElem.innerText = 'Email';
-
-  let headerDescrElem = document.createElement('th');
-  headerDescrElem.classList.add('table__header');
-  headerDescrElem.id = 'description';
-  headerDescrElem.innerText = 'Description';
+  let headerRegElem = createElement('th', 'table__header', 'Registration date', 'createdAt');
+  let headerNameElem = createElement('th', 'table__header', 'Name', 'name');
+  let headerEmailElem = createElement('th', 'table__header', 'Email', 'email');
+  let headerDescrElem = createElement('th', 'table__header', 'Description', 'description');
 
   rowElem.appendChild(headerIdElem);
   rowElem.appendChild(headerRegElem);
   rowElem.appendChild(headerNameElem);
   rowElem.appendChild(headerEmailElem);
   rowElem.appendChild(headerDescrElem);
+
   return rowElem;
+}
+
+function fillTable(arr, tableElem) {
+  arr.forEach((elem) => {
+    let date = new Date(elem['createdAt']);
+    let rowElem = document.createElement('tr');
+    rowElem.classList.add('table__row');
+
+    let idElem = createElement('td', 'table__data', elem['id']);
+    let regElem = createElement('td', 'table__data',
+      date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2));
+    let nameElem = createElement('td', 'table__data', elem['name']);
+    let emailElem = createElement('td', 'table__data', elem['email']);
+    let descrElem = createElement('td', 'table__data', elem['description']);
+
+    rowElem.appendChild(idElem);
+    rowElem.appendChild(regElem);
+    rowElem.appendChild(nameElem);
+    rowElem.appendChild(emailElem);
+    rowElem.appendChild(descrElem);
+
+    tableElem.appendChild(rowElem);
+  });
+}
+
+function createElement(tagName, htmlClass, innerText, id) {
+  let elem = document.createElement(tagName);
+  elem.classList.add(htmlClass);
+  elem.innerText = innerText;
+  elem.id = id;
+
+  return elem;
 }
