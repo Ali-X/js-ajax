@@ -97,6 +97,7 @@ window.task3 = function task3() {
 
       let headerIdElem = document.createElement('th');
       headerIdElem.classList.add('table__header');
+      headerIdElem.classList.add('js-sort-asc');
       headerIdElem.id = 'id';
       headerIdElem.innerText = 'Visitor id';
 
@@ -169,7 +170,26 @@ window.task3 = function task3() {
 
       for (let i = 0; i < headers.length; i++) {
         headers[i].addEventListener('click', () => {
-          sortByKey(headers[i].id);
+
+          for (let j = 0; j < headers.length; j++) {
+            if (headers[j] !== headers[i]) {
+              headers[j].classList.remove('js-sort-asc');
+              headers[j].classList.remove('js-sort-desc');
+            }
+          }
+
+          if (headers[i].classList.contains('js-sort-asc')) {
+            headers[i].classList.remove('js-sort-asc');
+            headers[i].classList.add('js-sort-desc');
+            sortByKeyDesc(headers[i].id);
+          } else if (headers[i].classList.contains('js-sort-desc')) {
+            headers[i].classList.remove('js-sort-desc');
+            headers[i].classList.add('js-sort-asc');
+            sortByKeyAsc(headers[i].id);
+          } else {
+            headers[i].classList.add('js-sort-asc');
+            sortByKeyAsc(headers[i].id);
+          }
 
           document.querySelectorAll('.table__row').forEach(elem => {
             elem.remove();
@@ -177,7 +197,7 @@ window.task3 = function task3() {
 
           // debugger;
           fillTable(document.getElementsByClassName('table')[0]);
-        })
+        });
       }
     }
 
@@ -185,7 +205,7 @@ window.task3 = function task3() {
       alert(xhr.status + ': ' + xhr.statusText);
     } else {
       visitorsTable = JSON.parse(xhr.responseText);
-      sortByKey('id');
+      sortByKeyAsc('id');
 
       let tableElem = document.createElement('table');
       tableElem.classList.add('table');
@@ -201,12 +221,25 @@ window.task3 = function task3() {
     }
   };
 
-  function sortByKey(key) {
+  function sortByKeyAsc(key) {
     visitorsTable.sort((a, b) => {
       if (a[key] > b[key]) {
         return 1;
       }
       if (a[key] < b[key]) {
+        return -1;
+      }
+
+      return 0;
+    });
+  }
+
+  function sortByKeyDesc(key) {
+    visitorsTable.sort((a, b) => {
+      if (a[key] < b[key]) {
+        return 1;
+      }
+      if (a[key] > b[key]) {
         return -1;
       }
 
